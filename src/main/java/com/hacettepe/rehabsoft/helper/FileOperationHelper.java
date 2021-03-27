@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,6 +33,11 @@ public class FileOperationHelper {
             newFileName.append(words);
         }
         return fileType;
+    }
+    // pop file type. append popped string to second parameter which is newFileName
+    public static String popFileTypeFromFileName(String filename){
+        List<String> listToGetFileType =  new LinkedList<>(Arrays.asList(Objects.requireNonNull(filename).split("\\.")));
+        return listToGetFileType.remove(listToGetFileType.size()-1);
     }
 
     // This function is used to save any file by giving location url and its name added in url.
@@ -75,5 +83,13 @@ public class FileOperationHelper {
         }
 
         return stringBuilder.toString();
+    }
+
+    //This function is used to convert BufferedImage to byte array
+    public static byte[] convertToByteArray(BufferedImage bufferedImage, String url) throws IOException {
+        String type = popFileTypeFromFileName(url);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, type, baos);
+        return baos.toByteArray();
     }
 }

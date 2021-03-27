@@ -74,7 +74,7 @@ public class GeneralEvaluationFormController {
     public ResponseEntity<byte[]> getBotoxImageById(@PathVariable Long id) throws IOException {
         log.warn("getBotoxImageById() metoduna girdi "+id);
         byte[] exerciseImage = generalEvaluationFormService.getBotoxImageById(id);
-        if(exerciseImage==null){
+        if(exerciseImage==null || exerciseImage.length==0){
             log.error("Botox resmi bulunamadi ");
             responseMessage.setResponseMessage("Hata oldu");
             return ResponseEntity.badRequest().body(null);
@@ -90,7 +90,7 @@ public class GeneralEvaluationFormController {
     public ResponseEntity<byte[]> getEpicrisisImageById(@PathVariable Long id) throws IOException {
         log.warn("getEpicrisisImageById() metoduna girdi "+id);
         byte[] epicrisisImageById = generalEvaluationFormService.getEpicrisisImageById(id);
-        if(epicrisisImageById==null){
+        if(epicrisisImageById==null || epicrisisImageById.length == 0){
             log.error("Epicrisis resmi bulunamadi ");
             responseMessage.setResponseMessage("Hata oldu");
             return ResponseEntity.badRequest().body(null);

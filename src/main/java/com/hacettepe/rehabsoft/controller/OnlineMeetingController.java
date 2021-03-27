@@ -41,7 +41,7 @@ public class OnlineMeetingController {
     public ResponseEntity<List<OnlineMeetingDto>> getOnlineMeetingsByUsername(@PathVariable String username) throws Exception {
         List<OnlineMeetingDto> onlineMeetingDtos = onlineMeetingService.getOnlineMeetingsByUsername(username);
         if(onlineMeetingDtos == null){
-            responseMessage.setResponseMessage("Online görüşme başarıyla eklendi");
+            responseMessage.setResponseMessage("Online görüşme bulunamadı");
             return ResponseEntity.status(500).body(null);
         } else {
             return ResponseEntity.ok(onlineMeetingDtos);

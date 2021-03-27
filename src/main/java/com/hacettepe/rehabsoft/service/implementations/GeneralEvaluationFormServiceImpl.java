@@ -19,8 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -376,10 +380,10 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         Optional<BotoxTreatment> botoxTreatment = botoxTreatmentRepository.findById(id);
         if(botoxTreatment.isPresent()){
             String path = botoxTreatment.get().getBotoxRecordUrl();
-            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader()
-                    .getResourceAsStream(path );
-            return IOUtils.toByteArray(in);
+            //path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
+            File readedFile = new File(path.replaceAll("\\\\", "\\\\\\\\"));
+            BufferedImage image = ImageIO.read(readedFile);
+            return FileOperationHelper.convertToByteArray(image, readedFile.getCanonicalPath());
         } else{
             return null;
         }
@@ -391,8 +395,7 @@ public class GeneralEvaluationFormServiceImpl implements GeneralEvaluationFormSe
         if(appliedSurgery.isPresent()){
             String path = appliedSurgery.get().getEpicrisisImageUrl();
             path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader()
-                    .getResourceAsStream(path );
+            InputStream in = getClass().getClassLoader().getResourceAsStream(path );
             return IOUtils.toByteArray(in);
         } else{
             return null;
