@@ -38,9 +38,9 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
 
         for (WebSocketSession connectedSession : sessions) {
             System.out.println(connectedSession.getPrincipal());
-            // if (connectedSession.isOpen() && isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(Objects.requireNonNull(session.getPrincipal()).getName(), Objects.requireNonNull(connectedSession.getPrincipal()).getName())) {
+            if (connectedSession.isOpen() && isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(Objects.requireNonNull(session.getPrincipal()).getName(), Objects.requireNonNull(connectedSession.getPrincipal()).getName())) {
                 connectedSession.sendMessage(message);
-            // }
+            }
         }
     }
 
