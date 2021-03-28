@@ -70,9 +70,7 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
         return !currentConnectedUser.equals(otherUser)
                 && onlineMeetingService.getOnlineMeetingsByUsername(currentConnectedUser)
                 .stream()
-                .anyMatch(onlineMeetingDto ->
-                        (onlineMeetingDto.getDoctorUser().getUsername().equals(otherUser) || onlineMeetingDto.getPatientUser().getUsername().equals(otherUser))
-                        && isMeetingToday(onlineMeetingDto));
+                .anyMatch(onlineMeetingDto -> (onlineMeetingDto.getDoctorUser().getUsername().equals(otherUser) || onlineMeetingDto.getPatientUser().getUsername().equals(otherUser)) && isMeetingToday(onlineMeetingDto));
     }
 
     private boolean isMeetingToday(OnlineMeetingDto onlineMeetingDto) {
