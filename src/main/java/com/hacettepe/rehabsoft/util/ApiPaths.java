@@ -8,7 +8,7 @@ public class ApiPaths {
     // Localde kullanilicak
     // private static final String CLASS_PATH = "./src/main/resources";
     // Prodda kullanilicak
-    private static final String CLASS_PATH = "";
+    private static final String CLASS_PATH = ".";
 
     //    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
     public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
@@ -36,11 +36,11 @@ public class ApiPaths {
 
 
     public static final class SavingBotoxImagePath {
-        public static final String CTRL = CLASS_PATH+"./static/generalevaluationform/botoximage/";
+        public static final String CTRL = CLASS_PATH+"/static/generalevaluationform/botoximage/";
     }
 
     public static final class SavingAppliedSurgeryImagePath {
-        public static final String CTRL = CLASS_PATH+"./static/generalevaluationform/appliedsurgeryimage/";
+        public static final String CTRL = CLASS_PATH+"/static/generalevaluationform/appliedsurgeryimage/";
     }
 
 
@@ -49,15 +49,15 @@ public class ApiPaths {
     }
 
     public static final class SavingOtherOrthesisImagePath {
-        public static final String CTRL = CLASS_PATH+"./static/generalevaluationform/otherorthesisimage/";
+        public static final String CTRL = CLASS_PATH+"/static/generalevaluationform/otherorthesisimage/";
     }
 
     public static final class SavingExerciseMediaPath {
-        public static final String CTRL = CLASS_PATH+"./static/exercise/";
+        public static final String CTRL = CLASS_PATH+"/static/exercise/";
     }
 
     public static final class SavingResponseVideoRequestPath {
-        public static final String CTRL = CLASS_PATH+"./static/responsevideorequest/";
+        public static final String CTRL = CLASS_PATH+"/static/responsevideorequest/";
     }
 
     public static final class Profile {
