@@ -63,7 +63,7 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         log.warn("Session is removed: "+session);
-        // sessions.remove(session);
+        sessions.remove(session);
     }
 
     private boolean isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(String currentConnectedUser, String otherUser) throws Exception {
