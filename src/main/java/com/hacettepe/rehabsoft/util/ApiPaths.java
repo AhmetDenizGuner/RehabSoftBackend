@@ -12,7 +12,8 @@ public class ApiPaths {
 
     //    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
     //    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
-        public static final String[] LOCAL_CLIENT_BASE_PATH = {"http://localhost:4200","https://rehabsoft.herokuapp.com","http://rehabsoft.herokuapp.com"};
+    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.herokuapp.com";
+    public static final String LOCAL_CLIENT_BASE_PATH1 = "http://rehabsoft.herokuapp.com";
 
     public static final class AdminPath {
         public static final String CTRL = BASE_PATH + "/admin";

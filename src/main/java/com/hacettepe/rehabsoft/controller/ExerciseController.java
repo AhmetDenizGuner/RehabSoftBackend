@@ -19,8 +19,10 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+import static com.hacettepe.rehabsoft.util.ApiPaths.LOCAL_CLIENT_BASE_PATH1;
+
 @Slf4j
-@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, maxAge = 3600)
+@CrossOrigin(origins = {ApiPaths.LOCAL_CLIENT_BASE_PATH, LOCAL_CLIENT_BASE_PATH1}, maxAge = 3600)
 @RequestMapping(ApiPaths.ExercisePath.CTRL)
 @RestController
 @Api(value = "/api/exercises")

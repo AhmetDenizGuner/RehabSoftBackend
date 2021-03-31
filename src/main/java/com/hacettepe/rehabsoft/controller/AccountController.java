@@ -28,12 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import static com.hacettepe.rehabsoft.util.ApiPaths.LOCAL_CLIENT_BASE_PATH1;
+
 
 @Slf4j
 @RestController
 @RequestMapping("/api/token") //Token pathine gelen bütün isteklere izin verilecek.Bunun ayarı SecurityConfig'de
 @Api(value = "/api/token")
-@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, allowCredentials = "true")
+@CrossOrigin(origins = {ApiPaths.LOCAL_CLIENT_BASE_PATH, LOCAL_CLIENT_BASE_PATH1}, allowCredentials = "true")
 public class AccountController {
 
     @Autowired
