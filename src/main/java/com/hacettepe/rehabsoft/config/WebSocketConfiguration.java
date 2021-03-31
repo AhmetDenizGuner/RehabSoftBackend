@@ -19,7 +19,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         SocketHandlerConfig webSocketHandlerConfig = new SocketHandlerConfig(onlineMeetingService);
-        registry.addHandler(webSocketHandlerConfig, ApiPaths.OnlineMeetingWebSocket.CTRL)
+        registry.addHandler(webSocketHandlerConfig, ApiPaths.OnlineMeetingWebSocket.CTRL).setAllowedOrigins("*")
 
                 // this code can be used to eliminate other users connection who has nto any meeting url in database.
 //                .addInterceptors(new HttpSessionHandshakeInterceptor()
