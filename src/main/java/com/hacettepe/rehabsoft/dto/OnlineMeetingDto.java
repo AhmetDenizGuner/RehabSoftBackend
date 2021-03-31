@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Valid
 public class OnlineMeetingDto {
 
+    private Long id;
+
     @NotNull
     private UserDto patientUser;
 

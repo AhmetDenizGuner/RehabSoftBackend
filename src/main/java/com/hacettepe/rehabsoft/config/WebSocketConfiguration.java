@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacettepe.rehabsoft.service.OnlineMeetingService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-
-import java.util.Map;
 
 @Configuration
 @EnableWebSocket
@@ -19,8 +18,8 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        SocketHandler webSocketHandler = new SocketHandler(onlineMeetingService);
-        registry.addHandler(webSocketHandler, ApiPaths.OnlineMeetingWebSocket.CTRL)
+        SocketHandlerConfig webSocketHandlerConfig = new SocketHandlerConfig(onlineMeetingService);
+        registry.addHandler(webSocketHandlerConfig, ApiPaths.OnlineMeetingWebSocket.CTRL)
 
                 // this code can be used to eliminate other users connection who has nto any meeting url in database.
 //                .addInterceptors(new HttpSessionHandshakeInterceptor()

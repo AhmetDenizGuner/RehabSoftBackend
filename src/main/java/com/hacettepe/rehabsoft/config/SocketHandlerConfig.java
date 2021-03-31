@@ -15,20 +15,20 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+
 
 @Component
 @Slf4j
 @Api(value = ApiPaths.OnlineMeetingWebSocket.CTRL)
-public class SocketHandler extends TextWebSocketHandler implements SubProtocolCapable {
+public class SocketHandlerConfig extends TextWebSocketHandler implements SubProtocolCapable {
 
     private final OnlineMeetingService onlineMeetingService;
     List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
-    public SocketHandler(OnlineMeetingService onlineMeetingService) {
+    public SocketHandlerConfig(OnlineMeetingService onlineMeetingService) {
         this.onlineMeetingService = onlineMeetingService;
     }
 
@@ -37,8 +37,7 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
         String request = message.getPayload();
 
         for (WebSocketSession connectedSession : sessions) {
-            System.out.println(connectedSession.getPrincipal());
-            if (connectedSession.isOpen() && isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(Objects.requireNonNull(session.getPrincipal()).getName(), Objects.requireNonNull(connectedSession.getPrincipal()).getName())) {
+            if (connectedSession.isOpen() && isThisSessionProperToSendMessage(session, connectedSession)) {
                 connectedSession.sendMessage(message);
             }
         }
@@ -66,16 +65,27 @@ public class SocketHandler extends TextWebSocketHandler implements SubProtocolCa
         sessions.remove(session);
     }
 
-    private boolean isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(String currentConnectedUser, String otherUser) throws Exception {
-        return !currentConnectedUser.equals(otherUser)
-                && onlineMeetingService.getOnlineMeetingsByUsername(currentConnectedUser)
-                .stream()
-                .anyMatch(onlineMeetingDto -> (onlineMeetingDto.getDoctorUser().getUsername().equals(otherUser) || onlineMeetingDto.getPatientUser().getUsername().equals(otherUser)) && isMeetingToday(onlineMeetingDto));
+    private boolean isThisSessionProperToSendMessage(WebSocketSession currentConnectedUserSession, WebSocketSession otherUserSession) throws Exception {
+        final String currentUser = currentConnectedUserSession.getPrincipal().getName();
+        final String otherUser = otherUserSession.getPrincipal().getName();
+        final List<OnlineMeetingDto> onlineMeetingsByCurrentUser = onlineMeetingService.getOnlineMeetingsByUsername(currentUser);
+
+        return !currentUser.equals(otherUser)
+                && isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(otherUser, onlineMeetingsByCurrentUser);
     }
+
+    private boolean isThisUserNotCurrentUserAndHasMeetingWithCurrentConnectedUser(String otherUser, List<OnlineMeetingDto> onlineMeetingsByCurrentUser) {
+        return onlineMeetingsByCurrentUser.stream().anyMatch(onlineMeetingDto ->
+                (onlineMeetingDto.getDoctorUser().getUsername().equals(otherUser)
+                        || onlineMeetingDto.getPatientUser().getUsername().equals(otherUser))
+        && isMeetingToday(onlineMeetingDto));
+    }
+
 
     private boolean isMeetingToday(OnlineMeetingDto onlineMeetingDto) {
         return LocalDateTime.now().getDayOfMonth() == onlineMeetingDto.getMeetingDate().getDayOfMonth()
                 && LocalDateTime.now().getMonth().equals(onlineMeetingDto.getMeetingDate().getMonth())
                 && LocalDateTime.now().getYear() == onlineMeetingDto.getMeetingDate().getYear();
     }
+
 }
