@@ -44,7 +44,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 //                return b;
 //            }
 //        })
-        .setAllowedOrigins(ApiPaths.LOCAL_CLIENT_BASE_PATH1);
+        .setAllowedOrigins("*");
     }
 
 }
