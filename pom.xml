@@ -138,6 +138,8 @@
 			<version>2.4.0</version>
 		</dependency>
 		<!--********** these are for AbstractSecurityWebSocketMessageBrokerConfigurer **********-->
+
+
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.security</groupId>-->
 <!--			<artifactId>spring-security-web</artifactId>-->
@@ -157,7 +159,6 @@
 <!--			<groupId>org.springframework</groupId>-->
 <!--			<artifactId>spring-messaging</artifactId>-->
 <!--		</dependency>-->
-
 	</dependencies>
 
 	<build>

@@ -8,12 +8,12 @@ public class ApiPaths {
     // Localde kullanilicak
     // private static final String CLASS_PATH = "./src/main/resources";
     // Prodda kullanilicak
-    private static final String CLASS_PATH = ".";
+    private static final String CLASS_PATH = "./src/main/resources";
 
     //    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
     //    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.netlify.app";
-    public static final String LOCAL_CLIENT_BASE_PATH = "https://rehabsoft.herokuapp.com";
-    public static final String LOCAL_CLIENT_BASE_PATH1 = "http://rehabsoft.herokuapp.com";
+    public static final String LOCAL_CLIENT_BASE_PATH = "http://localhost:4200";
+    public static final String LOCAL_CLIENT_BASE_PATH1 = "http://localhost:4200";
 
     public static final class AdminPath {
         public static final String CTRL = BASE_PATH + "/admin";
@@ -54,7 +54,7 @@ public class ApiPaths {
     }
 
     public static final class SavingExerciseMediaPath {
-        public static final String CTRL = CLASS_PATH+"/static/exercise/";
+        public static final String CTRL = "/static/exercise/";
     }
 
     public static final class SavingResponseVideoRequestPath {
@@ -76,8 +76,6 @@ public class ApiPaths {
     public static final class ResponseVideoRequestPath {
         public static final String CTRL = BASE_PATH + "/response-video-request";
     }
-
-
 
     public static final class MessagePath {
         public static final String CTRL = BASE_PATH + "/message";
