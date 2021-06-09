@@ -7,8 +7,7 @@ CREATE SEQUENCE roles_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE roles_seq
-    OWNER TO postgres;
+
 
 CREATE SEQUENCE public.users_seq
     INCREMENT 1
@@ -16,8 +15,7 @@ CREATE SEQUENCE public.users_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.users_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.doctor_seq
     INCREMENT 1
@@ -25,8 +23,7 @@ CREATE SEQUENCE public.doctor_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.doctor_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.admins_seq
     INCREMENT 1
@@ -34,8 +31,7 @@ CREATE SEQUENCE public.admins_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.admins_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.phone_seq
     INCREMENT 1
@@ -43,8 +39,7 @@ CREATE SEQUENCE public.phone_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.phone_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.il_seq
     INCREMENT 1
@@ -52,8 +47,7 @@ CREATE SEQUENCE public.il_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.il_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.ilce_seq
     INCREMENT 1
@@ -61,8 +55,7 @@ CREATE SEQUENCE public.ilce_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.ilce_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.parent_seq
     INCREMENT 1
@@ -70,8 +63,7 @@ CREATE SEQUENCE public.parent_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.parent_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.general_evaluation_form_seq
     INCREMENT 1
@@ -79,8 +71,7 @@ CREATE SEQUENCE public.general_evaluation_form_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.general_evaluation_form_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.disease_of_mother_seq
     INCREMENT 1
@@ -88,8 +79,7 @@ CREATE SEQUENCE public.disease_of_mother_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.disease_of_mother_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.hyperbilirubinemia_seq
     INCREMENT 1
@@ -97,8 +87,7 @@ CREATE SEQUENCE public.hyperbilirubinemia_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.hyperbilirubinemia_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.after_birth_reason_celebral_palsy_seq
     INCREMENT 1
@@ -106,8 +95,7 @@ CREATE SEQUENCE public.after_birth_reason_celebral_palsy_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.after_birth_reason_celebral_palsy_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.botox_treatment_seq
     INCREMENT 1
@@ -115,8 +103,7 @@ CREATE SEQUENCE public.botox_treatment_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.botox_treatment_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.applied_surgery_seq
     INCREMENT 1
@@ -124,8 +111,7 @@ CREATE SEQUENCE public.applied_surgery_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.applied_surgery_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.patient_seq
     INCREMENT 1
@@ -133,8 +119,7 @@ CREATE SEQUENCE public.patient_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.patient_seq
-    OWNER TO postgres;
+ 
 
 
 
@@ -144,8 +129,7 @@ CREATE SEQUENCE public.orthesis_info_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.orthesis_info_seq
-    OWNER TO postgres;
+ 
 
 
 
@@ -155,8 +139,7 @@ CREATE SEQUENCE public.other_orthesis_info_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.orthesis_info_seq
-    OWNER TO postgres;
+ 
 
 
 CREATE SEQUENCE public.used_medicine_seq
@@ -165,8 +148,7 @@ CREATE SEQUENCE public.used_medicine_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.used_medicine_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.coexisting_disease_seq
     INCREMENT 1
@@ -174,8 +156,7 @@ CREATE SEQUENCE public.coexisting_disease_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.coexisting_disease_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.visual_impairment_seq
     INCREMENT 1
@@ -183,8 +164,7 @@ CREATE SEQUENCE public.visual_impairment_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.visual_impairment_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.expactations_about_program_seq
     INCREMENT 1
@@ -192,8 +172,7 @@ CREATE SEQUENCE public.expactations_about_program_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.expactations_about_program_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.disease_of_mother_pregnancy_seq
     INCREMENT 1
@@ -201,8 +180,7 @@ CREATE SEQUENCE public.disease_of_mother_pregnancy_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.disease_of_mother_pregnancy_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.after_birth_reason_cerebral_palsy_seq
     INCREMENT 1
@@ -210,8 +188,7 @@ CREATE SEQUENCE public.after_birth_reason_cerebral_palsy_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.after_birth_reason_cerebral_palsy_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.exercise_seq
     INCREMENT 1
@@ -219,8 +196,7 @@ CREATE SEQUENCE public.exercise_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.exercise_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.exercise_image_seq
     INCREMENT 1
@@ -228,8 +204,7 @@ CREATE SEQUENCE public.exercise_image_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.exercise_image_seq
-    OWNER TO postgres;
+ 
 
 
 CREATE SEQUENCE public.exercise_video_seq
@@ -238,8 +213,7 @@ CREATE SEQUENCE public.exercise_video_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.exercise_video_seq
-    OWNER TO postgres;
+ 
 
 
 CREATE SEQUENCE public.hearing_impairment_seq
@@ -248,8 +222,7 @@ CREATE SEQUENCE public.hearing_impairment_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.hearing_impairment_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.expectations_about_program_seq
     INCREMENT 1
@@ -257,8 +230,7 @@ CREATE SEQUENCE public.expectations_about_program_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.expectations_about_program_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.form_field_default_value_seq
     INCREMENT 1
@@ -266,8 +238,7 @@ CREATE SEQUENCE public.form_field_default_value_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.form_field_default_value_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.form_field_seq
     INCREMENT 1
@@ -275,8 +246,7 @@ CREATE SEQUENCE public.form_field_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.form_field_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.form_dynamic_seq
     INCREMENT 1
@@ -284,8 +254,7 @@ CREATE SEQUENCE public.form_dynamic_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.form_dynamic_seq
-    OWNER TO postgres;
+ 
 
 CREATE SEQUENCE public.form_template_seq
     INCREMENT 1
@@ -293,8 +262,7 @@ CREATE SEQUENCE public.form_template_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.form_template_seq
-    OWNER TO postgres;
+
 
 CREATE SEQUENCE public.assigned_form_seq
     INCREMENT 1
@@ -302,8 +270,7 @@ CREATE SEQUENCE public.assigned_form_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.assigned_form_seq
-    OWNER TO postgres;
+
 
 CREATE SEQUENCE public.form_answers_seq
     INCREMENT 1
@@ -311,8 +278,7 @@ CREATE SEQUENCE public.form_answers_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.form_answers_seq
-    OWNER TO postgres;
+
 
 --new
 
@@ -322,8 +288,7 @@ CREATE SEQUENCE public.epilepsy_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.epilepsy_seq
-    OWNER TO postgres;
+
 --new
 
 CREATE SEQUENCE public.physiotherapy_past_seq
@@ -332,8 +297,7 @@ CREATE SEQUENCE public.physiotherapy_past_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.physiotherapy_past_seq
-    OWNER TO postgres;
+
 --new
 
 CREATE SEQUENCE public.physiotherapy_central_seq
@@ -342,8 +306,7 @@ CREATE SEQUENCE public.physiotherapy_central_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.physiotherapy_central_seq
-    OWNER TO postgres;
+
 --- tables start----
 
 
@@ -995,8 +958,7 @@ CREATE SEQUENCE public.physiotherapy_program_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.physiotherapy_program_seq
-    OWNER TO postgres;
+
 
 
 CREATE SEQUENCE public.scheduled_exercise_seq
@@ -1005,8 +967,7 @@ CREATE SEQUENCE public.scheduled_exercise_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.scheduled_exercise_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.physiotherapy_program
 (
@@ -1059,8 +1020,7 @@ CREATE SEQUENCE public.video_request_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.video_request_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.video_request
 (
@@ -1103,8 +1063,7 @@ CREATE SEQUENCE public.response_video_request_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.response_video_request_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.response_video_request
 (
@@ -1127,8 +1086,7 @@ CREATE SEQUENCE public.requested_video_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.requested_video_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.requested_video
 (
@@ -1151,8 +1109,7 @@ CREATE SEQUENCE public.notification_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.notification_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.notification
 (
@@ -1188,8 +1145,7 @@ CREATE SEQUENCE public.message_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.message_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.message
 (
@@ -1222,8 +1178,7 @@ CREATE SEQUENCE public.online_meeting_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.online_meeting_seq
-    OWNER TO postgres;
+
 
 CREATE TABLE public.online_meeting
 (
@@ -1255,8 +1210,8 @@ CREATE SEQUENCE public.firebase_token_seq
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1;
-ALTER SEQUENCE public.firebase_token_seq
-    OWNER TO postgres;
+
+
 CREATE TABLE public.firebase_token
 (
     "id" bigint NOT NULL default nextval('firebase_token_seq'),
