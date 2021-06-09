@@ -26,7 +26,7 @@ public class GoogleDriveHelper {
     private final Storage storage;
 
     public GoogleDriveHelper() throws IOException, URISyntaxException {
-        InputStream in = getClass().getResourceAsStream("/hacettepe-rehabsoft-firebase.json");
+        InputStream in = getClass().getResourceAsStream("/key_credentials.json");
         Credentials credentials = GoogleCredentials
                 .fromStream(in);
         StorageOptions options = StorageOptions.newBuilder()
