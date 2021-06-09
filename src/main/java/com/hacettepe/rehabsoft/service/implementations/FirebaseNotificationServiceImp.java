@@ -32,6 +32,7 @@ public class FirebaseNotificationServiceImp implements FirebaseNotificationServi
                 .builder()
                 .setTitle(notificationDto.getNotificationTitle())
                 .setBody(notificationDto.getNotificationContent())
+                .setImage("https://seeklogo.com/images/H/Hacettepe__and__220_niversitesi-logo-35A0817A19-seeklogo.com.png")
                 .build();
 
         for (FirebaseToken firebaseToken:firebaseTokenList) {
