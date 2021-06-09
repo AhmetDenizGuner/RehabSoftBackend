@@ -6,9 +6,11 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,15 +18,16 @@ import java.util.List;
 import java.util.Objects;
 @Component
 public class GoogleDriveHelper {
-    
+
     private final String BUCKET_NAME = "spring-bucket-rehabsoft_cs";
 
     private final Bucket bucket;
     private final Storage storage;
 
     public GoogleDriveHelper() throws IOException {
+
         Credentials credentials = GoogleCredentials
-                .fromStream(new FileInputStream(Objects.requireNonNull(getClass().getClassLoader().getResource("key_credentials.json")).getFile()));
+                .fromStream(new FileInputStream(new File(Objects.requireNonNull(new ClassPathResource("key_credentials.json").getURI()))));
         StorageOptions options = StorageOptions.newBuilder()
                 .setProjectId("hacettepe-rehabsoft")
                 .setCredentials(credentials).build();
