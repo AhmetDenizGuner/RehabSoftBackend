@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,10 +25,10 @@ public class GoogleDriveHelper {
     private final Bucket bucket;
     private final Storage storage;
 
-    public GoogleDriveHelper() throws IOException {
+    public GoogleDriveHelper() throws IOException, URISyntaxException {
 
         Credentials credentials = GoogleCredentials
-                .fromStream(new FileInputStream(new File(Objects.requireNonNull(new ClassPathResource("key_credentials.json").getURI()))));
+                .fromStream(new FileInputStream(new File(getClass().getResource("/key_credentials.json").toURI())));
         StorageOptions options = StorageOptions.newBuilder()
                 .setProjectId("hacettepe-rehabsoft")
                 .setCredentials(credentials).build();
