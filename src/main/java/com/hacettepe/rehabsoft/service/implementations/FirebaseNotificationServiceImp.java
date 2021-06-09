@@ -52,7 +52,9 @@ public class FirebaseNotificationServiceImp implements FirebaseNotificationServi
         FirebaseToken firebaseToken = new FirebaseToken();
         firebaseToken.setFirebaseTokenContent(token);
         firebaseToken.setUser(user);
-        firebaseTokenRepository.save(firebaseToken);
+        if(user.getFirebaseTokenCollection().stream().noneMatch(firebaseToken1 -> firebaseToken.getFirebaseTokenContent().equals(firebaseToken1.getFirebaseTokenContent()))){
+            firebaseTokenRepository.save(firebaseToken);
+        }
         return modelMapper.map(user, UserDto.class);
     }
 }

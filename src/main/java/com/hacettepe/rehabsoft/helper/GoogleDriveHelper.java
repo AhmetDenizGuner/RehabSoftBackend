@@ -18,6 +18,8 @@ import java.util.Objects;
 @Component
 public class GoogleDriveHelper {
 
+    //@Value("${spring.cloud.gcp.credentials.location}")
+    //private String GOOGLE_CREDENTIALS_LOCATION;
     private final String BUCKET_NAME = "spring-bucket-rehabsoft_cs";
 
     private final Bucket bucket;
