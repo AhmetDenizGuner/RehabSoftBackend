@@ -9,10 +9,8 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import static com.hacettepe.rehabsoft.util.ApiPaths.LOCAL_CLIENT_BASE_PATH1;
-
 @Slf4j
-@CrossOrigin(origins = {ApiPaths.LOCAL_CLIENT_BASE_PATH, LOCAL_CLIENT_BASE_PATH1}, allowCredentials = "true")
+@CrossOrigin(origins = ApiPaths.LOCAL_CLIENT_BASE_PATH, allowCredentials = "true")
 @RestController
 @RequestMapping(ApiPaths.VideoStreamPath.CTRL)
 public class VideoStreamController {
