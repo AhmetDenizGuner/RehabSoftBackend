@@ -101,7 +101,7 @@ public class GeneralEvaluationFormDto {
 
 
     //AfterBirthReasonCerebralPalsy
-    private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
+    private AfterBirthReasonCerebralPalsyDto afterBirthReasonCerebralPalsy;
 
     //Botox_Treatment
     private BotoxTreatmentDto botoxTreatment;

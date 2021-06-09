@@ -14,10 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,29 +33,23 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
     private final ResponseVideoRequestRepository responseVideoRequestRepository;
     private final RequestedVideoRepository requestedVideoRepository;
     private final EntityManager entityManager;
+    private final FileOperationHelper fileOperationHelper;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String save(String responseVideoRequestJSON, MultipartFile[] responseMediaList, Long videoRequestId) throws Exception {
-        try {
-            System.out.println("responseVideoRequestJSON: "+responseVideoRequestJSON);
-            // Mapping JSON to Object DTO and Entity after
-            ResponseVideoRequestDto responseVideoRequestDto = (ResponseVideoRequestDto) BeanValidationDeserializer.deserializeJSONWithValidation(responseVideoRequestJSON, ResponseVideoRequestDto.class);
 
-            ResponseVideoRequest tempResponseVideoRequest = modelMapper.map(responseVideoRequestDto, ResponseVideoRequest.class);
-            BigInteger idOfSavingResponse = (BigInteger) entityManager.createNativeQuery("SELECT nextval('response_video_request_seq')").getSingleResult();
-            idOfSavingResponse = idOfSavingResponse.add(BigInteger.ONE);
-            fillRequestedVideoCollection( tempResponseVideoRequest, responseMediaList,idOfSavingResponse );
-
-            tempResponseVideoRequest.setVideoRequest(videoRequestRepository.findById(videoRequestId).orElseThrow());
-            tempResponseVideoRequest = responseVideoRequestRepository.save(tempResponseVideoRequest);
-            responseVideoRequestDto.setId(tempResponseVideoRequest.getId());
-
-            return "ResponseVideoRequest başarıyla kaydedildi!";
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new Exception();
-        }
+        System.out.println("responseVideoRequestJSON: "+responseVideoRequestJSON);
+        // Mapping JSON to Object DTO and Entity after
+        ResponseVideoRequestDto responseVideoRequestDto = (ResponseVideoRequestDto) BeanValidationDeserializer.deserializeJSONWithValidation(responseVideoRequestJSON, ResponseVideoRequestDto.class);
+        ResponseVideoRequest tempResponseVideoRequest = modelMapper.map(responseVideoRequestDto, ResponseVideoRequest.class);
+        BigInteger idOfSavingResponse = (BigInteger) entityManager.createNativeQuery("SELECT nextval('response_video_request_seq')").getSingleResult();
+        idOfSavingResponse = idOfSavingResponse.add(BigInteger.ONE);
+        fillRequestedVideoCollection( tempResponseVideoRequest, responseMediaList,idOfSavingResponse );
+        tempResponseVideoRequest.setVideoRequest(videoRequestRepository.findById(videoRequestId).orElseThrow());
+        tempResponseVideoRequest = responseVideoRequestRepository.save(tempResponseVideoRequest);
+        responseVideoRequestDto.setId(tempResponseVideoRequest.getId());
+        return "ResponseVideoRequest başarıyla kaydedildi!";
     }
 
     @Override
@@ -77,22 +71,14 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
     }
 
     private void fillRequestedVideoCollection(ResponseVideoRequest responseVideoRequest, MultipartFile[] responseMediaList, BigInteger idOfSavingResponse) throws Exception {
-        try{
-            if(responseVideoRequest.getRequestedVideoCollection()!=null){
-                List<RequestedVideo> forIterationNewRequestedVideoCollection = new ArrayList<>(responseVideoRequest.getRequestedVideoCollection());
-                List<RequestedVideo> newRequestedVideoCollection = new ArrayList<>();
 
-                for(RequestedVideo requestedVideo:forIterationNewRequestedVideoCollection){
-
-                    saveRequestedVideoAndSetRequestedVideoUrls(requestedVideo, responseMediaList, responseVideoRequest, newRequestedVideoCollection, idOfSavingResponse);
-                }
-
+        if(responseVideoRequest.getRequestedVideoCollection()!=null){
+            List<RequestedVideo> forIterationNewRequestedVideoCollection = new ArrayList<>(responseVideoRequest.getRequestedVideoCollection());
+            List<RequestedVideo> newRequestedVideoCollection = new ArrayList<>();
+            for(RequestedVideo requestedVideo:forIterationNewRequestedVideoCollection){
+                saveRequestedVideoAndSetRequestedVideoUrls(requestedVideo, responseMediaList, responseVideoRequest, newRequestedVideoCollection, idOfSavingResponse);
             }
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new Exception();
         }
-
     }
 
     private void saveRequestedVideoAndSetRequestedVideoUrls(RequestedVideo requestedVideo, MultipartFile[] responseMediaList, ResponseVideoRequest responseVideoRequest, List<RequestedVideo> newRequestedVideoCollection,  BigInteger idOfSavingResponse)
@@ -102,32 +88,27 @@ public class ResponseVideoRequestServiceImp implements ResponseVideoRequestServi
         }
 
         for(MultipartFile multipartFile:responseMediaList){
-            try {
-                StringBuilder newFileName = new StringBuilder();
-                String fileType = FileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
 
-                // videonun ismi, url'e girilecek front endde.
-                if(newFileName.toString().equals(requestedVideo.getVideoUrl())){
+            StringBuilder newFileName = new StringBuilder();
+            String fileType = fileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
 
-                    requestedVideo.setVideoUrl(null);
-                    responseVideoRequest.getRequestedVideoCollection().remove(requestedVideo);
-                    RequestedVideo persistedRequestedVideo = requestedVideoRepository.save(requestedVideo);
-                    String directoryAndMediaURL = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingResponseVideoRequestPath.CTRL+"",
-                            idOfSavingResponse.toString() +"",
-                            persistedRequestedVideo.getId()+"-" + newFileName.toString(),
-                            fileType+""
-                    );
+            // videonun ismi, url'e girilecek front endde.
+            if(newFileName.toString().equals(requestedVideo.getVideoUrl())){
 
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
+                requestedVideo.setVideoUrl(null);
+                responseVideoRequest.getRequestedVideoCollection().remove(requestedVideo);
+                RequestedVideo persistedRequestedVideo = requestedVideoRepository.save(requestedVideo);
+                String directoryAndMediaURL = fileOperationHelper.createURLWithDirectory(
+                        ApiPaths.SavingResponseVideoRequestPath.CTRL+idOfSavingResponse.toString() +"",
+                        persistedRequestedVideo.getId()+"-" + newFileName.toString(),
+                        fileType+""
+                );
 
-                    persistedRequestedVideo.setVideoUrl(savedUrl);
-                    persistedRequestedVideo.setResponseVideoRequest(responseVideoRequest);
-                    newRequestedVideoCollection.add(persistedRequestedVideo);
-                }
-            }  catch(Exception e){
-                e.printStackTrace();
-                throw new Exception();
+                String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
+
+                persistedRequestedVideo.setVideoUrl(savedUrl);
+                persistedRequestedVideo.setResponseVideoRequest(responseVideoRequest);
+                newRequestedVideoCollection.add(persistedRequestedVideo);
             }
         }
     }

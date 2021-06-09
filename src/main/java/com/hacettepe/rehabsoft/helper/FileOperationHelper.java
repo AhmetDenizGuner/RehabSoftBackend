@@ -1,7 +1,10 @@
 package com.hacettepe.rehabsoft.helper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -15,22 +18,26 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class FileOperationHelper {
 
+    private final GoogleDriveHelper googleDriveHelper;
+
     // This function is used to create a directory in given url, and add filename its end
-    public static String createURLWithDirectory(String savingDirectory, String createdDirectoryName, String fileName, String fileType){
-        String createdDirectoryURL = savingDirectory + createdDirectoryName;
-        File file = new File(createdDirectoryURL);
-        boolean bool = file.mkdir();
-        return createdDirectoryURL+ "/"+fileName+"."+fileType ;
+    public String createURLWithDirectory(String createdDirectoryName, String fileName, String fileType){
+        return createdDirectoryName+"/"+fileName+"."+fileType ;
     }
 
     // pop file type. append popped string to second parameter which is newFileName
-    public static String popFileTypeFromFileName(String filename, StringBuilder newFileName){
+    public String popFileTypeFromFileName(String filename, StringBuilder newFileName){
         List<String> listToGetFileType =  new LinkedList<>(Arrays.asList(Objects.requireNonNull(filename).split("\\.")));
         String fileType = listToGetFileType.remove(listToGetFileType.size()-1);
-        for(String words: listToGetFileType){
-            newFileName.append(words);
+        for (int i = 0; i < listToGetFileType.size(); i++) {
+            newFileName.append(listToGetFileType.get(i));
+            if(i!=listToGetFileType.size()-1){
+                newFileName.append('.');
+            }
         }
         return fileType;
     }
@@ -41,48 +48,34 @@ public class FileOperationHelper {
     }
 
     // This function is used to save any file by giving location url and its name added in url.
-    public static String saveFileByDirectory(MultipartFile image, String directory) throws Exception{
+    public String saveFileByDirectory(MultipartFile image, String directory) throws Exception{
         if(image.getContentType() != null){
-
             log.warn("Dosya kaydetme kismina girdi. Content type: " + image.getContentType());
-
-            byte[] bytes = image.getBytes();
-            Path path = Paths.get(directory );
-            Files.write(path, bytes);
-
+            googleDriveHelper.saveFile(image, directory);
             return directory;
-
         }
         else return null;
     }
 
     // This method is delete folder with its data contains by using PATH.
-    public static void deleteDirectoryByPath(String folderPath) throws IOException {
+    public void deleteDirectoryByPath(String folderPath) throws Exception {
 
         log.warn("Klasor silme kismina girdi");
-
-        if(Files.exists(Paths.get(folderPath))){
-            File mediaFolder = new File(folderPath);
-            FileUtils.deleteDirectory(mediaFolder);
-        }
+        googleDriveHelper.deleteFolder(folderPath);
     }
 
-    // if read file is problem because of the path, it removes strings until to resource directory.
-    public static String splitPathAndMergeStartFromStaticDirectory(String savedUrl) {
-        List<String> urlArray = new ArrayList<>(Arrays.asList(savedUrl.split("/")));
-        urlArray.remove(0);
-        urlArray.remove(0);
-        urlArray.remove(0);
-        urlArray.remove(0);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(urlArray.get(0));
-        urlArray.remove(0);
+    public void deleteFileByPath(String filePath){
 
-        for(String str:urlArray){
-            stringBuilder.append("/").append(str);
-        }
+        log.warn("Dosya silme kismina girdi");
+        googleDriveHelper.deleteFile(filePath);
+    }
 
-        return stringBuilder.toString();
+    public byte[] readFileAsByte(String filePath) {
+        return googleDriveHelper.readFileAsByteArray(filePath);
+    }
+
+    public Long getSizeOfFile(String filePath){
+        return googleDriveHelper.getSizeOfFile(filePath);
     }
 
     //This function is used to convert BufferedImage to byte array

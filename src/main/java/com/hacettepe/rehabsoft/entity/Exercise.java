@@ -1,9 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -11,7 +8,8 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "exercise")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "exercise_seq", initialValue = 1, allocationSize = 1)

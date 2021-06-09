@@ -47,7 +47,7 @@ public class ExerciseController {
     }
 
     @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
-    public ResponseEntity<Boolean> deleteExercise(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Boolean> deleteExercise(@PathVariable(value = "id") Long id) throws Exception {
         log.warn("exercise delete controllerına girdi: "+id);
         exerciseService.delete(id);
         return ResponseEntity.ok(Boolean.TRUE);
@@ -89,7 +89,7 @@ public class ExerciseController {
             return ResponseEntity.badRequest().body(null);
         }
         else {
-            log.error("Egzersiz resmi basariyla bulundu ");
+            log.warn("Egzersiz resmi basariyla bulundu ");
             return ResponseEntity.ok(exerciseImage);
         }
     }

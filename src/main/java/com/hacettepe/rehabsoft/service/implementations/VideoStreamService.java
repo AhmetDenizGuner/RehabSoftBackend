@@ -2,6 +2,7 @@ package com.hacettepe.rehabsoft.service.implementations;
 
 import com.hacettepe.rehabsoft.entity.ExerciseVideo;
 import com.hacettepe.rehabsoft.entity.RequestedVideo;
+import com.hacettepe.rehabsoft.helper.FileOperationHelper;
 import com.hacettepe.rehabsoft.repository.ExerciseVideoRepository;
 import com.hacettepe.rehabsoft.repository.RequestedVideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +27,7 @@ public class VideoStreamService {
 
     private final ExerciseVideoRepository exerciseVideoRepository;
     private final RequestedVideoRepository requestedVideoRepository;
+    private final FileOperationHelper fileOperationHelper;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -52,7 +51,7 @@ public class VideoStreamService {
         }
         String filepath = exerciseVideo.get().getVideoUrl();
         try {
-            fileSize = getFileSize(filepath);
+            fileSize = fileOperationHelper.getSizeOfFile(filepath);
             if (range == null) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .header(CONTENT_TYPE, VIDEO_CONTENT + fileType)
@@ -97,7 +96,7 @@ public class VideoStreamService {
         }
         String filepath = requestedVideo.get().getVideoUrl();
         try {
-            fileSize = getFileSize(filepath);
+            fileSize = fileOperationHelper.getSizeOfFile(filepath);
             if (range == null) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .header(CONTENT_TYPE, VIDEO_CONTENT + fileType)
@@ -140,8 +139,8 @@ public class VideoStreamService {
      * @throws IOException exception.
      */
     public byte[] readByteRange(String filepath, long start, long end) throws IOException {
-        Path path = Paths.get(filepath);
-        try (InputStream inputStream = (Files.newInputStream(path));
+        byte[] fileAsByte = fileOperationHelper.readFileAsByte(filepath);
+        try (InputStream inputStream = (new ByteArrayInputStream(fileAsByte));
              ByteArrayOutputStream bufferedOutputStream = new ByteArrayOutputStream()) {
             byte[] data = new byte[BYTE_RANGE];
             int nRead;
@@ -155,29 +154,6 @@ public class VideoStreamService {
         }
     }
 
-    /**
-     * Get the filePath.
-     *
-     * @return String.
-     */
-    private String getFilePath() {
-//        URL url = this.getClass().getResource(VIDEO);
-//        final String absolutePath = new File(url.getFile()).getAbsolutePath();
-        return EXERCISE_VIDEO_FOLDER_LOCATION;
-    }
-
-    /**
-     * Content length.
-     *
-     * @param fileName String.
-     * @return Long.
-     */
-    public Long getFileSize(String fileName) {
-        return Optional.ofNullable(fileName)
-                .map(file -> Paths.get(file))
-                .map(this::sizeFromFile)
-                .orElse(0L);
-    }
 
     /**
      * Getting the size from the path.

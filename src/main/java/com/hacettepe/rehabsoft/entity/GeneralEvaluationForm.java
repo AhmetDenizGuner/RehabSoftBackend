@@ -2,10 +2,7 @@ package com.hacettepe.rehabsoft.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +11,8 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "general_evaluation_form")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "general_evaluation_form_seq", initialValue = 1, allocationSize = 1)
@@ -123,36 +121,28 @@ public class GeneralEvaluationForm extends BaseEntity {
     @Column(name = "is_hypoglycaemia")
     private Boolean isHypoglycaemia;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private DiseaseOfMotherPregnancy diseaseOfMotherPregnancy;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private Hyperbilirubinemia hyperbilirubinemia;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private AfterBirthReasonCerebralPalsy afterBirthReasonCerebralPalsy;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private BotoxTreatment botoxTreatment;
 
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<AppliedSurgery> appliedSurgeryCollection;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<OrthesisInfo> orthesisInfoCollection;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<OtherOrthesisInfo> otherOrthesisInfoCollection;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<UsedMedicine> usedMedicineCollection;
 
@@ -163,25 +153,20 @@ public class GeneralEvaluationForm extends BaseEntity {
     private Collection<CoexistingDiseases> coexistingDiseasesCollection;
 
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private VisualImpairment visualImpairment;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private HearingImpairment hearingImpairment;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "generalEvaluationForm", cascade = CascadeType.ALL)
     private Collection<ExpectationsAboutProgram> expectationsAboutProgramCollection;
 
 
-    @JsonManagedReference
     @OneToOne
     @JoinColumn( name="patient_id")
     private Patient patient;
 
-    @JsonManagedReference
     @OneToOne(cascade = javax.persistence.CascadeType.ALL,mappedBy = "generalEvaluationForm")
     private Epilepsy epilepsy;
 

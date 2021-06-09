@@ -28,15 +28,14 @@ public class FormDynamicDto {
 
     @Size(max = 600)
     @ApiModelProperty(required = true, value = "explanation")
-    private String explaation;
+    private String explanation;
 
     @ApiModelProperty(required = true, value = "formFieldList")
-    private Collection<FormField> formFieldCollection;
+    private Collection<FormFieldDto> formFieldCollection;
 
-    @ApiModelProperty(required = true, value = "formTemplate")
-    private FormTemplate formTemplate;
 
-    @ApiModelProperty(required = true, value = "assignedFormCollection")
-    private Collection<AssignedForm> assignedFormCollection;
+
+    /*@ApiModelProperty(required = true, value = "assignedFormCollection")
+    private Collection<AssignedForm> assignedFormCollection;*/
 
 }

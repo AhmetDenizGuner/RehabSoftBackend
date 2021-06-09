@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,38 +25,36 @@ public class OnlineMeetingServiceImp implements OnlineMeetingService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean save(OnlineMeetingDto onlineMeetingDto) throws Exception {
-        try {
-            OnlineMeeting onlineMeeting = modelMapper.map(onlineMeetingDto, OnlineMeeting.class);
-            User doctorUser = userRepository.findByUsername(onlineMeeting.getDoctorUser().getUsername());
-            User patientUser = userRepository.findByUsername(onlineMeeting.getPatientUser().getUsername());
-            onlineMeeting.setDoctorUser(doctorUser);
-            onlineMeeting.setPatientUser(patientUser);
-            onlineMeetingRepository.save(onlineMeeting);
-        } catch (Exception e) {
-            log.error("Online Meeting saving is Failed=>", e);
-            return Boolean.FALSE;
-        }
+
+        OnlineMeeting onlineMeeting = modelMapper.map(onlineMeetingDto, OnlineMeeting.class);
+        User doctorUser = userRepository.findByUsername(onlineMeeting.getDoctorUser().getUsername());
+        User patientUser = userRepository.findByUsername(onlineMeeting.getPatientUser().getUsername());
+        onlineMeeting.setDoctorUser(doctorUser);
+        onlineMeeting.setPatientUser(patientUser);
+        onlineMeetingRepository.save(onlineMeeting);
         return true;
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public List<OnlineMeetingDto> getOnlineMeetingsByUsername(String username) throws Exception {
-        try {
-            List<OnlineMeeting> onlineMeetingList = onlineMeetingRepository.getByUsername(username);
-            return onlineMeetingList.stream().map(onlineMeeting->modelMapper.map(onlineMeeting, OnlineMeetingDto.class)).collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("Online Meeting saving is Failed=>", e);
-            return null;
-        }
+        List<OnlineMeeting> onlineMeetingList = onlineMeetingRepository.getByUsername(username)
+                .stream()
+                .filter(onlineMeeting -> onlineMeeting.getMeetingDate().isAfter(LocalDateTime.now().minusDays(1))).collect(Collectors.toList());
+        return onlineMeetingList.stream().map(onlineMeeting->modelMapper.map(onlineMeeting, OnlineMeetingDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public Boolean isUsernameHasOnlineMeetingInCurrentDay(String username) {
         final List<OnlineMeeting> onlineMeetings = onlineMeetingRepository.getByUsername(username);
         return onlineMeetings.isEmpty() && isMeetingTimeInCurrentDay(onlineMeetings);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        onlineMeetingRepository.deleteById(id);
     }
 
     private boolean isMeetingTimeInCurrentDay(List<OnlineMeeting> onlineMeetings) {

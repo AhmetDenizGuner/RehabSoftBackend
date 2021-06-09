@@ -1,10 +1,7 @@
 package com.hacettepe.rehabsoft.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,7 +9,8 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "parent")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "parent_seq", initialValue = 1, allocationSize = 1)
@@ -30,7 +28,6 @@ public class Parent extends BaseEntity{
     @Column(name = "parent_type")
     private String parentType;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private Collection<Phone> phoneCollection;
 

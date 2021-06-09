@@ -9,16 +9,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 
 @SpringBootApplication
 @EnableJpaAuditing
 public class RehabsoftApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, GeneralSecurityException {
 		ApplicationContext context =  SpringApplication.run(RehabsoftApplication.class, args);
 		DatabasePopulator databasePopulator = (DatabasePopulator) context.getBean("databasePopulator");
 	}

@@ -23,8 +23,5 @@ public class FormFieldDefaultValueDto {
     @ApiModelProperty(required = true, value = "defaultValueName")
     private String valueName;
 
-    @NotEmpty
-    @ApiModelProperty(required = true, value = "formField")
-    private FormField formField;
 
 }

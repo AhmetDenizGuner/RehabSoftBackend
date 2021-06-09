@@ -1,8 +1,6 @@
 package com.hacettepe.rehabsoft.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
 
 import javax.persistence.*;
 
@@ -25,8 +23,10 @@ public class Notification extends BaseEntity {
     @Column(name = "notification_title")
     private String notificationTitle;
 
-
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;
+
+    @JoinColumn(name = "status")
+    private int status;
 }

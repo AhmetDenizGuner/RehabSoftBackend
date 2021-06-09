@@ -2,7 +2,6 @@ package com.hacettepe.rehabsoft.service;
 
 
 import com.hacettepe.rehabsoft.dto.OnlineMeetingDto;
-import com.hacettepe.rehabsoft.entity.OnlineMeeting;
 
 import java.util.List;
 
@@ -14,6 +13,8 @@ public interface OnlineMeetingService {
     List<OnlineMeetingDto> getOnlineMeetingsByUsername(String username) throws Exception;
 
     Boolean isUsernameHasOnlineMeetingInCurrentDay(String username);
+
+    void deleteById(Long id);
 
 //    Boolean delete(Long id);
 //

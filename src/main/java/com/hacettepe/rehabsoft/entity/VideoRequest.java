@@ -3,10 +3,7 @@ package com.hacettepe.rehabsoft.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -14,7 +11,8 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "video_request")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "video_request_seq", initialValue = 1, allocationSize = 1)

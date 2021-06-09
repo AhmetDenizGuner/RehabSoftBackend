@@ -14,7 +14,7 @@ import static com.hacettepe.rehabsoft.util.ApiPaths.LOCAL_CLIENT_BASE_PATH1;
 @Slf4j
 @CrossOrigin(origins = {ApiPaths.LOCAL_CLIENT_BASE_PATH, LOCAL_CLIENT_BASE_PATH1}, allowCredentials = "true")
 @RestController
-@RequestMapping("/video")
+@RequestMapping(ApiPaths.VideoStreamPath.CTRL)
 public class VideoStreamController {
 
     private final VideoStreamService videoStreamService;

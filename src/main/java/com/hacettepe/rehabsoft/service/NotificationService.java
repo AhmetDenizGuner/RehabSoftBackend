@@ -1,6 +1,8 @@
 package com.hacettepe.rehabsoft.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.NotificationDto;
+import com.hacettepe.rehabsoft.entity.Message;
 import com.hacettepe.rehabsoft.entity.Patient;
 import com.hacettepe.rehabsoft.entity.User;
 import com.hacettepe.rehabsoft.entity.VideoRequest;
@@ -8,21 +10,18 @@ import com.hacettepe.rehabsoft.entity.VideoRequest;
 import java.util.List;
 
 public interface NotificationService {
-    List<NotificationDto> getAll();
+    List<NotificationDto> getAll() throws FirebaseMessagingException;
 
     NotificationDto getById(Long id);
 
-    String save(NotificationDto notificationDto) throws Exception;
-
     Boolean delete(Long id);
-
-    String updateExercise(NotificationDto notificationDto) throws Exception;
-
-    void createNotificationForGeneralEvaluationForm(User tempUser);
 
     void deleteGeneralEvaluationFormNotification(User user);
 
-    void createNotifiactionForNewPatientToDoctor(Patient patient);
+    void createNotificationForMessage(Message message) throws FirebaseMessagingException;
 
-    void createNotifiactionForNewVideoRequest(VideoRequest videoRequest);
+    void clickNotification(Long notificationId);
+
+    void createNotification(User user, String notificationMessage, String notificationUrl, boolean isNotificationSend) throws FirebaseMessagingException;
+
 }

@@ -30,19 +30,16 @@ public class VideoRequestDto {
     private String requestTitle;
 
     //@ManyToOne
-    @JsonIgnore
     private DoctorDto doctor;
 
     //@ManyToOne
-    @JsonIgnore
     private PatientDto patient;
 
     //ManyToMany
-    @JsonIgnore
-    private Collection<Exercise> exerciseCollection;
+    private Collection<ExerciseDto> exerciseCollection;
 
     //one to one
-    private ResponseVideoRequest responseVideoRequest;
+    private ResponseVideoRequestDto responseVideoRequest;
 
     @NotNull
     private LocalDateTime creationDate;

@@ -19,11 +19,11 @@ import java.util.Collection;
 @ApiModel(value = "Data Transfer Object for Doctors and Physiotherapist")
 public class DoctorDto {
 
-    //OneToMany(mappedBy = "doctor")
-    Collection<PatientDto> patientCollection;
+    private Long id;
 
-    UserDto user;
+    private Collection<PatientDto> patientCollection;
 
-    //OneToMany(mappedBy = "doctor")
-    Collection<VideoRequestDto> videoRequestCollection;
+    private UserDto user;
+
+//    private Collection<VideoRequestDto> videoRequestCollection;
 }

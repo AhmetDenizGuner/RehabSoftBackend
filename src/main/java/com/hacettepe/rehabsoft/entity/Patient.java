@@ -2,10 +2,7 @@ package com.hacettepe.rehabsoft.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -13,7 +10,8 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "patient")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "patient_seq", initialValue = 1, allocationSize = 1)
@@ -25,7 +23,7 @@ public class Patient extends BaseEntity{
     @Column(name = "address")
     private String address;
 
-    @JsonBackReference
+    // @JsonBackReference
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     private GeneralEvaluationForm generalEvaluationForm;
 

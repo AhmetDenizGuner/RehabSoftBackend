@@ -15,16 +15,19 @@ public class DatabasePopulator {
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
     private final ExerciseRepository exerciseRepository;
+    private final AdminRepository adminRepository;
 
     DatabasePopulator(RoleRepository roleRepository, IlRepository ilRepository,
                       IlceRepository ilceRepository, UserRepository userRepository,
-                      DoctorRepository doctorRepository, ExerciseRepository exerciseRepository){
+                      DoctorRepository doctorRepository, ExerciseRepository exerciseRepository,
+                      AdminRepository adminRepository){
         this.roleRepository = roleRepository;
         this.ilRepository = ilRepository;
         this.ilceRepository = ilceRepository;
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
         this.exerciseRepository = exerciseRepository;
+        this.adminRepository = adminRepository;
 
         insertRoleAndUser();
         insertIlAndIlce();
@@ -38,6 +41,8 @@ public class DatabasePopulator {
 
             // create a doctor
             if(userRepository.findAll().isEmpty()){
+
+                // ************* doctor creation ************* //
                 User doctorUser = new User();
                 doctorUser.setEmail("oktay@oktay.com");
                 doctorUser.setFirstName("Oktay");
@@ -53,6 +58,23 @@ public class DatabasePopulator {
                 doctor.setUser(userFetched);
                 Doctor doctorSaved = doctorRepository.save(doctor);
 
+
+                // ************* admin creation ************* //
+                User adminUser = new User();
+
+                // password = admin
+                adminUser.setUsername("admin");
+                adminUser.setEmail("admin@admin.com");
+                adminUser.setFirstName("Oktay");
+                adminUser.setSurname("UGURLU");
+                adminUser.setPassword("$2y$12$pKfesPuyNERALXIiOF0wXuroQiTBy/Je3RWE4WBnpVSaSiw9p5rPC");
+                adminUser.setRole(adminRole);
+                User userFetched1 = userRepository.save(adminUser);
+
+                Admin admin = new Admin();
+                admin.setUser(userFetched1);
+                Admin adminSaved = adminRepository.save(admin);
+
                 if(exerciseRepository.findAll().isEmpty()){
                     final Exercise exercise1 = exerciseRepository.save(new Exercise("Deneme exercise", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
                     final Exercise exercise2 = exerciseRepository.save(new Exercise("Deneme exercise2", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
@@ -66,6 +88,7 @@ public class DatabasePopulator {
                     final Exercise exercise10 = exerciseRepository.save(new Exercise("Deneme exercise10", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
                     final Exercise exercise11 = exerciseRepository.save(new Exercise("Deneme exercise11", "Deneme contentcontentcontent content", new ArrayList<>(), new ArrayList<>(), userFetched, new ArrayList<>() ));
                 }
+
             }
         }
     }

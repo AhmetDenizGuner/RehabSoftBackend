@@ -14,7 +14,7 @@ public interface ExerciseService {
 
     String save(String exerciseJSON, MultipartFile[] exerciseMedia ) throws Exception;
 
-    Boolean delete(Long id);
+    Boolean delete(Long id) throws Exception;
 
     String updateExercise(String exerciseJSON, MultipartFile[] exerciseMedia) throws Exception;
 

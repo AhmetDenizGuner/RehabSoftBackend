@@ -89,6 +89,33 @@ public class AdminController {
 
 
 
+    @RequestMapping(value = "/deletepatient/{id}",method = RequestMethod.DELETE)
+    @ApiOperation(value="Delete Patient",response = Boolean.class)
+    public ResponseEntity<ResponseMessage> deletePatient(@PathVariable Long id){
+
+        if(adminCrudService.deletePatient(id)){
+            responseMessage.setResponseMessage("Hasta başarı ile kaldırıldı");
+            return ResponseEntity.ok(responseMessage);
+        }
+        else{
+            responseMessage.setResponseMessage("Silme işlemi sırasında bir hata meydana geldi! Lütfen tekrar deneyin");
+            return ResponseEntity.ok(responseMessage);
+        }
+    }
+
+
+
+    @RequestMapping(value = "/patients",method = RequestMethod.GET)
+    public ResponseEntity<List<UserCrudDto>> listAllPatients(){
+        log.warn("AdminCrud: patientList metodu basariyla calisti");
+        List<UserCrudDto> patientList = adminCrudService.listAllPatients();
+
+        return ResponseEntity.ok(patientList);
+    }
+
+
+
+
 
 
 

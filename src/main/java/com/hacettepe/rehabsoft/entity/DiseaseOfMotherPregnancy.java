@@ -1,23 +1,20 @@
 package com.hacettepe.rehabsoft.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "disease_of_mother_pregnancy")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "disease_of_mother_pregnancy_seq", initialValue = 1, allocationSize = 1)
 public class DiseaseOfMotherPregnancy extends BaseEntity{
 
-    @JsonBackReference
     @OneToOne(
             fetch = FetchType.EAGER
     )

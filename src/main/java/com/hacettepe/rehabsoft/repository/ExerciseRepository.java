@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ExerciseRepository extends JpaRepository<Exercise,Long> {
 
-    List<Exercise> findAll();
+    List<Exercise> findAllByOrderByIdDesc();
 
     Exercise getByExerciseName(String name);
 

@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.VideoRequestDto;
 import com.hacettepe.rehabsoft.entity.VideoRequest;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
@@ -9,6 +10,7 @@ import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.repository.VideoRequestRepository;
 import com.hacettepe.rehabsoft.service.NotificationService;
 import com.hacettepe.rehabsoft.service.VideoRequestService;
+import com.hacettepe.rehabsoft.util.NotificationPaths;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,9 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VideoRequestServiceImp implements VideoRequestService {
 
-    @Autowired
-    private VideoRequestRepository videoRequestRepository;
-
+    private final VideoRequestRepository videoRequestRepository;
     private final SecurityHelper securityHelper;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -34,7 +34,7 @@ public class VideoRequestServiceImp implements VideoRequestService {
     private final NotificationService notificationService;
 
     @Override
-    public boolean save(VideoRequestDto videoRequestDto,String patientTcNo) {
+    public boolean save(VideoRequestDto videoRequestDto,String patientTcNo) throws FirebaseMessagingException {
         log.warn("Video Request Save metoduna girdi");
         VideoRequest videoRequest = modelMapper.map(videoRequestDto, VideoRequest.class);
         videoRequest.setDoctor(doctorRepository.getDoctorByUser(userRepository.findByUsername(securityHelper.getUsername())));
@@ -43,7 +43,10 @@ public class VideoRequestServiceImp implements VideoRequestService {
         videoRequest.setPatient(patientRepository.getPatientByTcKimlikNo(patientTcNo));
 
         videoRequestRepository.save(videoRequest);
-        notificationService.createNotifiactionForNewVideoRequest(videoRequest);
+        notificationService.createNotification(videoRequest.getPatient().getUser(),
+                "Doktorunuz sizden yeni bir video talep etti. Detayları görmek için tıklayın",
+                NotificationPaths.BASE_PATH+"/user/user-video-submit",
+                true);
         return true;
         //diger logicleri buraya ekleyecegiz.Dönüs tipini string yapmak daha dogru olur!!!!
     }

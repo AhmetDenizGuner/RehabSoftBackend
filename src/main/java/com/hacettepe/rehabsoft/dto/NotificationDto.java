@@ -33,4 +33,7 @@ public class NotificationDto {
     @NotNull
     @NotEmpty
     private String notificationTitle;
+
+    private int status;
+
 }

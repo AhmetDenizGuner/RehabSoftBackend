@@ -31,10 +31,11 @@ public class FormFieldDto {
     private String fieldType;
 
     @NotEmpty
-    @ApiModelProperty(required = true, value = "formDynamic")
-    private FormDynamic formDynamic;
+    @ApiModelProperty(required = true, value = "fieldOrder")
+    private int fieldOrder;
+
 
     @ApiModelProperty(required = true, value = "formFieldDefaultValueList")
-    private Collection<FormFieldDefaultValue> formFieldDefaultValueCollection;
+    private Collection<FormFieldDefaultValueDto> formFieldDefaultValueCollection;
 
 }

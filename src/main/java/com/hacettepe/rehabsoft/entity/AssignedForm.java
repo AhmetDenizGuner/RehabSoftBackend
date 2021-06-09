@@ -1,22 +1,22 @@
 package com.hacettepe.rehabsoft.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "assigned_form")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "assigned_form_seq", initialValue = 1, allocationSize = 1)
 public class AssignedForm extends BaseEntity {
 
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.PERSIST )
     @JoinColumn(name = "form_dynamic_id")
     private FormDynamic formDynamic;
 
@@ -27,6 +27,6 @@ public class AssignedForm extends BaseEntity {
     @Column(name = "is_answered")
     private boolean isAnswered;
 
-    @OneToMany(mappedBy = "assignedForm", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignedForm", cascade = CascadeType.REMOVE)
     private Collection<FormAnswers> formAnswersCollection;
 }

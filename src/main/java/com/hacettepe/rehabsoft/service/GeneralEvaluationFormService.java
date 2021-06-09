@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface GeneralEvaluationFormService {
-    Boolean save(String GEFD, MultipartFile botoxImage, MultipartFile[] epicrisisImages, MultipartFile[] otherOrthesisImages);
+    Boolean save(String GEFD, MultipartFile botoxImage, MultipartFile[] epicrisisImages, MultipartFile[] otherOrthesisImages) throws Exception;
 
     boolean isGeneralEvaluationFormExist();
 

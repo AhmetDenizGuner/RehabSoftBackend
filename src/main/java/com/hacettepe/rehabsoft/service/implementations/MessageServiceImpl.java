@@ -11,6 +11,7 @@ import com.hacettepe.rehabsoft.helper.SecurityHelper;
 import com.hacettepe.rehabsoft.repository.MessageRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
 import com.hacettepe.rehabsoft.service.MessageService;
+import com.hacettepe.rehabsoft.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final SecurityHelper securityHelper;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @Override
     public boolean save(MessageDto messageDto) {
@@ -40,6 +42,7 @@ public class MessageServiceImpl implements MessageService {
 
         messageRepository.save(message);
 
+        notificationService.createNotificationForMessage(message);
         return true;
         }
         catch (Exception e){

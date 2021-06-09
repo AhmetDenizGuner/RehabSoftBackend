@@ -1,5 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
 import com.hacettepe.rehabsoft.dto.PatientDto;
 import com.hacettepe.rehabsoft.dto.VideoRequestDto;
@@ -29,7 +30,7 @@ public class VideoRequestController {
     private final ResponseMessage responseMessage;
 
     @RequestMapping(value="/create/{patientTcNo}", method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessage> saveVideoRequest(@RequestBody VideoRequestDto videoRequestDto,@PathVariable String patientTcNo){
+    public ResponseEntity<ResponseMessage> saveVideoRequest(@RequestBody VideoRequestDto videoRequestDto,@PathVariable String patientTcNo) throws FirebaseMessagingException {
         log.warn("saveVideoRequest controller'ı çalışıyor");
 
         boolean sonuc = videoRequestService.save(videoRequestDto,patientTcNo);
@@ -38,7 +39,7 @@ public class VideoRequestController {
             responseMessage.setResponseMessage("islem basarili");
         }
         else{
-            responseMessage.setResponseMessage("Kayıt sırasında bir hata meydana geldi");
+            responseMessage.setResponseMessage("İslem sırasında bir hata meydana geldi");
         }
 
         return ResponseEntity.ok(responseMessage);

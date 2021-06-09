@@ -14,8 +14,6 @@ public class ResponseVideoRequestDto {
     @ApiModelProperty(required = true,value = "ID")
     private Long id;
 
-    @NotNull
-    @NotEmpty
     private String responseContent;
 
     private Collection<RequestedVideoDto> requestedVideoCollection;

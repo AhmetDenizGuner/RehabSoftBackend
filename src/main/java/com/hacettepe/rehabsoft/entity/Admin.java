@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SequenceGenerator(name = "idgen", sequenceName = "admin_seq", initialValue = 1, allocationSize = 1)
+@SequenceGenerator(name = "idgen", sequenceName = "admins_seq", initialValue = 1, allocationSize = 1)
 public class Admin extends BaseEntity{
 
 

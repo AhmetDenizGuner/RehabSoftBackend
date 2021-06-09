@@ -21,5 +21,7 @@ public interface AdminCrudService {
     boolean deleteAdmin(Long id);
     List<UserCrudDto> listAllAdmins();
 
+    boolean deletePatient(Long id);
+    List<UserCrudDto> listAllPatients();
 
 }

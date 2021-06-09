@@ -370,6 +370,7 @@ CREATE TABLE public."users"
     user_password character varying(100),
     role_id bigint,
     email character varying(320),
+    reset_password_token character varying(320),
     firstname character varying(100),
     surname character varying(100),
     PRIMARY KEY ("id"),
@@ -378,7 +379,6 @@ CREATE TABLE public."users"
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
-
 
 
 CREATE TABLE public.admins
@@ -831,6 +831,7 @@ CREATE TABLE public.form_field
     "version" bigint,
     form_field_name varchar(600),
     field_type varchar(255),
+	form_field_order bigint,
     form_dynamic_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (form_dynamic_id)
@@ -909,6 +910,11 @@ CREATE TABLE public.form_template
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+ALTER TABLE form_template
+    ADD COLUMN user_id BIGINT;
+ALTER TABLE form_template
+    ADD CONSTRAINT fk_user_id
+        FOREIGN KEY (user_id) REFERENCES users (id);
 
 --new
 CREATE TABLE public.epilepsy
@@ -960,8 +966,9 @@ CREATE TABLE public.physiotherapy_central
 
 
 -- INSERT INTO doctor("version") VALUES (1);
+-- Insert doctor into patient removed,assign doctor to patient use case activated
 
-CREATE OR REPLACE FUNCTION add_doctor_procedure()
+/*CREATE OR REPLACE FUNCTION add_doctor_procedure()
     RETURNS trigger AS
 $BODY$
 BEGIN
@@ -975,7 +982,7 @@ CREATE TRIGGER add_doctor
     BEFORE INSERT
     ON PATIENT
     FOR EACH ROW
-EXECUTE PROCEDURE add_doctor_procedure();
+EXECUTE PROCEDURE add_doctor_procedure(); */
 
 
 
@@ -991,14 +998,6 @@ CREATE SEQUENCE public.physiotherapy_program_seq
 ALTER SEQUENCE public.physiotherapy_program_seq
     OWNER TO postgres;
 
-CREATE SEQUENCE public.added_exercise_in_program_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-ALTER SEQUENCE public.added_exercise_in_program_seq
-    OWNER TO postgres;
 
 CREATE SEQUENCE public.scheduled_exercise_seq
     INCREMENT 1
@@ -1033,12 +1032,14 @@ CREATE TABLE public.physiotherapy_program
 );
 
 
-CREATE TABLE public.added_exercise_in_program
+CREATE TABLE public.scheduled_exercise
 (
-    "id" bigint NOT NULL default nextval('added_exercise_in_program_seq'),
+    "id" bigint NOT NULL default nextval('scheduled_exercise_seq'),
     creation_date timestamp without time zone,
     last_modified_date timestamp without time zone,
     "version" bigint,
+    scheduled_date  timestamp without time zone,
+    is_applied boolean,
     physiotherapy_program_id bigint,
     exercise_id bigint,
     PRIMARY KEY ("id"),
@@ -1048,22 +1049,6 @@ CREATE TABLE public.added_exercise_in_program
         ON DELETE CASCADE,
     FOREIGN KEY (exercise_id)
         REFERENCES public."exercise" ("id") MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
-
-CREATE TABLE public.scheduled_exercise
-(
-    "id" bigint NOT NULL default nextval('scheduled_exercise_seq'),
-    creation_date timestamp without time zone,
-    last_modified_date timestamp without time zone,
-    "version" bigint,
-    added_exercise_in_program_id bigint,
-    scheduled_date  timestamp without time zone,
-    is_applied boolean,
-    PRIMARY KEY ("id"),
-    FOREIGN KEY (added_exercise_in_program_id)
-        REFERENCES public."added_exercise_in_program" ("id") MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -1178,6 +1163,7 @@ CREATE TABLE public.notification
     notification_content varchar(255),
     notification_url varchar(255),
     notification_title varchar(100),
+    status bigint,
     users_id bigint,
     PRIMARY KEY ("id"),
     FOREIGN KEY (users_id)
@@ -1259,4 +1245,29 @@ CREATE TABLE public.online_meeting
         ON DELETE CASCADE
 );
 
+
 ---******************** version 0.5 ****************************---
+
+
+CREATE SEQUENCE public.firebase_token_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+ALTER SEQUENCE public.firebase_token_seq
+    OWNER TO postgres;
+CREATE TABLE public.firebase_token
+(
+    "id" bigint NOT NULL default nextval('firebase_token_seq'),
+    creation_date timestamp without time zone,
+    last_modified_date timestamp without time zone,
+    "version" bigint,
+    firebase_token_content character varying(255),
+    user_id bigint,
+    PRIMARY KEY ("id"),
+    FOREIGN KEY (user_id)
+        REFERENCES public."users" ("id") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);

@@ -1,28 +1,22 @@
 package com.hacettepe.rehabsoft.service.implementations;
 
 
-import com.hacettepe.rehabsoft.dto.*;
-import com.hacettepe.rehabsoft.entity.Patient;
-import com.hacettepe.rehabsoft.entity.Role;
+import com.hacettepe.rehabsoft.dto.DoctorInfoDto;
+import com.hacettepe.rehabsoft.dto.RegistrationRequest;
+import com.hacettepe.rehabsoft.dto.UserCrudDto;
 import com.hacettepe.rehabsoft.entity.User;
-import com.hacettepe.rehabsoft.repository.AdminRepository;
-import com.hacettepe.rehabsoft.repository.DoctorRepository;
-import com.hacettepe.rehabsoft.repository.RoleRepository;
-import com.hacettepe.rehabsoft.repository.UserRepository;
+import com.hacettepe.rehabsoft.repository.*;
 import com.hacettepe.rehabsoft.service.AdminCrudService;
 import com.hacettepe.rehabsoft.service.AdminService;
 import com.hacettepe.rehabsoft.service.DoctorService;
 import com.hacettepe.rehabsoft.service.UserService;
-import com.hacettepe.rehabsoft.util.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 
 
 @Service
@@ -39,6 +33,7 @@ public class AdminCrudServiceImpl implements AdminCrudService {
     private final DoctorRepository doctorRepository;
     private final AdminRepository adminRepository;
 
+    private final PatientRepository patientRepository;
 
     @Override
     public boolean createNewDoctor(RegistrationRequest registrationRequest) {
@@ -122,10 +117,41 @@ public class AdminCrudServiceImpl implements AdminCrudService {
 
         return Arrays.asList(modelMapper.map(adminUsers, UserCrudDto[].class));
 
+    }
+
+
+
+    @Override
+    public boolean deletePatient(Long id) {
+        log.warn("Patient silme operasyonu aktif:" + id);
+        try {
+            userService.deleteUser(id);
+            log.warn("Patient silme operasyonunda bir sorun meydana geldi");
+            return Boolean.TRUE;
+        }
+        catch (Exception e){
+            return Boolean.FALSE;
+        }
 
 
 
     }
+
+
+    @Override
+    public List<UserCrudDto> listAllPatients(){
+        //User rolü sadece hastalara veriliyor.
+        List<User> patients= userRepository.getAllByRoleName("USER");
+
+        if(patients==null){
+            return null;}
+
+        return Arrays.asList(modelMapper.map(patients, UserCrudDto[].class));
+
+    }
+
+
+
 
 
 }

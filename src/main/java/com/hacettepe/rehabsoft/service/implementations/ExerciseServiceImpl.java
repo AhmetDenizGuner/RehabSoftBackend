@@ -7,7 +7,6 @@ import com.hacettepe.rehabsoft.entity.*;
 import com.hacettepe.rehabsoft.helper.BeanValidationDeserializer;
 import com.hacettepe.rehabsoft.helper.FileOperationHelper;
 import com.hacettepe.rehabsoft.helper.SecurityHelper;
-import com.hacettepe.rehabsoft.repository.ExerciseImageRepository;
 import com.hacettepe.rehabsoft.repository.ExerciseRepository;
 import com.hacettepe.rehabsoft.repository.ExerciseVideoRepository;
 import com.hacettepe.rehabsoft.repository.UserRepository;
@@ -15,20 +14,14 @@ import com.hacettepe.rehabsoft.service.ExerciseService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,10 +35,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final UserRepository userRepository;
     private final SecurityHelper securityHelper;
     private final ObjectMapper objectMapper;
+    private final FileOperationHelper fileOperationHelper;
 
     @Override
     public List<ExerciseDto> getAll(){
-        List<Exercise> exercises = exerciseRepository.findAll();
+        List<Exercise> exercises = exerciseRepository.findAllByOrderByIdDesc();
         return  Arrays.asList(modelMapper.map(exercises, ExerciseDto[].class));
     }
 
@@ -56,92 +50,63 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String save(String exerciseJSON, MultipartFile[] exerciseMediaList) throws Exception {
 
-        try {
-            System.out.println("exerciseJSON: "+exerciseJSON);
-            // Mapping JSON to Object DTO and Entity after
-            ExerciseDto exerciseDto = (ExerciseDto) BeanValidationDeserializer.deserializeJSONWithValidation(exerciseJSON, ExerciseDto.class);
-
-            if(this.isExerciseNameExists(exerciseDto.getExerciseName())){
-                return "Bu isim başka bir egzersiz için kullanılıyor.Lütfen başka bir isim seçiniz.";
-            }
-
-            Exercise tempExercise = modelMapper.map(exerciseDto, Exercise.class);
-            tempExercise.setUser(userRepository.findByUsername(securityHelper.getUsername()));
-            List<ExerciseVideo> exerciseVideoListToSave = (List<ExerciseVideo>) tempExercise.getExerciseVideoCollection();
-            tempExercise.setExerciseVideoCollection(null);
-            tempExercise = exerciseRepository.save(tempExercise);
-            exerciseDto.setId(tempExercise.getId());
-
-            fillExerciseVideoCollection( tempExercise, exerciseMediaList, exerciseVideoListToSave );
-
-
-            return "Egzersiz başarıyla kaydedildi!";
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new Exception();
+        System.out.println("exerciseJSON: "+exerciseJSON);
+        // Mapping JSON to Object DTO and Entity after
+        ExerciseDto exerciseDto = (ExerciseDto) BeanValidationDeserializer.deserializeJSONWithValidation(exerciseJSON, ExerciseDto.class);
+        if(this.isExerciseNameExists(exerciseDto.getExerciseName())){
+            return "Bu isim başka bir egzersiz için kullanılıyor.Lütfen başka bir isim seçiniz.";
         }
-
+        Exercise tempExercise = modelMapper.map(exerciseDto, Exercise.class);
+        tempExercise.setUser(userRepository.findByUsername(securityHelper.getUsername()));
+        List<ExerciseVideo> exerciseVideoListToSave = (List<ExerciseVideo>) tempExercise.getExerciseVideoCollection();
+        tempExercise.setExerciseVideoCollection(null);
+        tempExercise = exerciseRepository.save(tempExercise);
+        exerciseDto.setId(tempExercise.getId());
+        fillExerciseVideoCollection( tempExercise, exerciseMediaList, exerciseVideoListToSave );
+        return "Egzersiz başarıyla kaydedildi!";
     }
 
     @Override
-    @Transactional
-    public Boolean delete(Long id) {
-        try{
-            if(exerciseRepository.findById(id).isPresent()){
-                deleteExerciseMediaFiles(exerciseRepository.findById(id).get());
-                exerciseRepository.deleteById(id);
-            }
-            else{
-                throw new Exception();
-            }
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean delete(Long id) throws Exception {
 
-            log.warn("Egzersiz silindi=>"+ id);
-            return Boolean.TRUE;
+        if(exerciseRepository.findById(id).isPresent()){
+            deleteExerciseMediaFiles(exerciseRepository.findById(id).get());
+            exerciseRepository.deleteById(id);
         }
-        catch (Exception e) {
-            log.error("Deletion of Exercise is Failed=>", e);
-            return Boolean.FALSE;
+        else{
+            throw new Exception();
         }
+        log.warn("Egzersiz silindi=>"+ id);
+        return Boolean.TRUE;
+
     }
 
 
     @Override
     public Boolean isExerciseNameExists(String name) {
-        if(exerciseRepository.getByExerciseName(name) ==null){
-            return false;
-        }
-        return true;
+        return exerciseRepository.getByExerciseName(name) != null;
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String updateExercise(String exerciseJSON, MultipartFile[] exerciseFiles) throws Exception {
 
-        try {
-            ExerciseDto exerciseDto = (ExerciseDto) BeanValidationDeserializer.deserializeJSONWithValidation(exerciseJSON, ExerciseDto.class);
-            Exercise dbExercise = exerciseRepository.findById(exerciseDto.getId()).orElseThrow(EntityNotFoundException::new);
-
-            if(!dbExercise.getExerciseName().equals(exerciseDto.getExerciseName()) ){
-                if(this.isExerciseNameExists(exerciseDto.getExerciseName())){
-                    return "Bu isim başka bir egzersiz için kullanılıyor.Lütfen başka bir isim seçiniz.";
-                }
+        ExerciseDto exerciseDto = (ExerciseDto) BeanValidationDeserializer.deserializeJSONWithValidation(exerciseJSON, ExerciseDto.class);
+        Exercise dbExercise = exerciseRepository.findById(exerciseDto.getId()).orElseThrow(EntityNotFoundException::new);
+        if(!dbExercise.getExerciseName().equals(exerciseDto.getExerciseName()) ){
+            if(this.isExerciseNameExists(exerciseDto.getExerciseName())){
+                return "Bu isim başka bir egzersiz için kullanılıyor.Lütfen başka bir isim seçiniz.";
             }
-
-            dbExercise.setExerciseName(exerciseDto.getExerciseName());
-            dbExercise.setExerciseContent(exerciseDto.getExerciseContent());
-            exerciseRepository.save(dbExercise);
-
-            updateExerciseMediaCollection(exerciseFiles, dbExercise, exerciseDto);
-            return "Egzersiz ile ilgili değişiklikler başarıyla kaydedildi!";
-
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new Exception();
         }
-
+        dbExercise.setExerciseName(exerciseDto.getExerciseName());
+        dbExercise.setExerciseContent(exerciseDto.getExerciseContent());
+        exerciseRepository.save(dbExercise);
+        updateExerciseMediaCollection(exerciseFiles, dbExercise, exerciseDto);
+        return "Egzersiz ile ilgili değişiklikler başarıyla kaydedildi!";
     }
 
     @Override
@@ -149,9 +114,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         Optional<ExerciseVideo> exerciseVideo = exerciseVideoRepository.findById(id);
         if(exerciseVideo.isPresent()){
             String path = exerciseVideo.get().getVideoUrl();
-            path = FileOperationHelper.splitPathAndMergeStartFromStaticDirectory(path);
-            InputStream in = getClass().getClassLoader().getResourceAsStream(path );
-            return IOUtils.toByteArray(in);
+            return fileOperationHelper.readFileAsByte(path);
         } else{
             return null;
         }
@@ -161,7 +124,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         // if(exerciseMediaList.getSize()>50000)
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void updateExerciseMediaCollection(MultipartFile[] exerciseFiles, Exercise exerciseFromDatabase, ExerciseDto exerciseDto) throws Exception {
 
         if(!exerciseDto.getExerciseVideoCollection().isEmpty()){
@@ -170,7 +133,10 @@ public class ExerciseServiceImpl implements ExerciseService {
             setExerciseVideoCollectionWithNewAddedExerciseVideo(exerciseFromDatabase, exerciseDto);
         }
         else{
-            deleteExerciseMediaFiles(exerciseFromDatabase);
+            if(!exerciseFromDatabase.getExerciseVideoCollection().isEmpty()){
+                cleanDeletedExerciseMedia(exerciseFromDatabase, exerciseDto);
+                deleteExerciseMediaFiles(exerciseFromDatabase);
+            }
         }
 
         fillExerciseVideoCollection(exerciseFromDatabase, exerciseFiles, (List<ExerciseVideo>) exerciseFromDatabase.getExerciseVideoCollection());
@@ -197,8 +163,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .collect(Collectors.toList());
 
         deletingExerciseVideoList.forEach(exerciseVideo -> {
-            File file = new File(exerciseVideo.getVideoUrl());
-            file.delete();
+            fileOperationHelper.deleteFileByPath(exerciseVideo.getVideoUrl());
         });
         exerciseFromDatabase.getExerciseVideoCollection().removeAll(deletingExerciseVideoList);
         exerciseVideoRepository.deleteAll(deletingExerciseVideoList);
@@ -213,30 +178,19 @@ public class ExerciseServiceImpl implements ExerciseService {
         return false;
     }
 
-    private void deleteExerciseMediaFiles(Exercise exerciseFromDatabase) throws IOException {
+    private void deleteExerciseMediaFiles(Exercise exerciseFromDatabase) throws Exception {
         if(exerciseFromDatabase.getExerciseVideoCollection() != null) {
-            try {
-                String folderPath = ApiPaths.SavingExerciseMediaPath.CTRL + "/" + exerciseFromDatabase.getId();
-                FileOperationHelper.deleteDirectoryByPath(folderPath);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new IOException();
-            }
+            String folderPath = ApiPaths.SavingExerciseMediaPath.CTRL + exerciseFromDatabase.getId()+"/";
+            fileOperationHelper.deleteDirectoryByPath(folderPath);
         }
     }
 
     private void fillExerciseVideoCollection(Exercise exercise, MultipartFile[] exerciseMediaList, List<ExerciseVideo> exerciseVideoList) throws Exception {
-        try{
-            if(exerciseVideoList!=null){
-                for(ExerciseVideo exerciseVideo:exerciseVideoList){
-                    saveExerciseMediaAndSetExerciseMediaUrls(exerciseVideo, exerciseMediaList, exercise);
-                }
+        if(exerciseVideoList!=null){
+            for(ExerciseVideo exerciseVideo:exerciseVideoList){
+                saveExerciseMediaAndSetExerciseMediaUrls(exerciseVideo, exerciseMediaList, exercise);
             }
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new Exception();
         }
-
     }
 
     private void saveExerciseMediaAndSetExerciseMediaUrls(ExerciseVideo exerciseVideo, MultipartFile[] exerciseMediaList, Exercise exercise)
@@ -246,34 +200,22 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
 
         for(MultipartFile multipartFile:exerciseMediaList){
-            try {
-                StringBuilder newFileName = new StringBuilder();
-                String fileType = FileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
-
-                if(newFileName.toString().equals(exerciseVideo.getTitle())){
-                    exerciseVideo.setVideoUrl(null);
-                    ExerciseVideo persistedExerciseVideo = exerciseVideoRepository.save(exerciseVideo);
-
-                    String directoryAndMediaURL = FileOperationHelper.createURLWithDirectory(
-                            ApiPaths.SavingExerciseMediaPath.CTRL+"",
-                            exercise.getId()+"",
-                            persistedExerciseVideo.getId()+"-" + newFileName.toString(),
-                            fileType+""
-                    );
-
-                    String savedUrl = FileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
-
-                    persistedExerciseVideo.setVideoUrl(savedUrl);
-                    persistedExerciseVideo.setExercise(exercise);
-                    exerciseVideoRepository.save(persistedExerciseVideo);
-                }
-            }  catch(Exception e){
-                e.printStackTrace();
-                throw new Exception();
+            StringBuilder newFileName = new StringBuilder();
+            String fileType = fileOperationHelper.popFileTypeFromFileName(multipartFile.getOriginalFilename(), newFileName);
+            if(newFileName.toString().equals(exerciseVideo.getTitle())){
+                exerciseVideo.setVideoUrl(null);
+                ExerciseVideo persistedExerciseVideo = exerciseVideoRepository.save(exerciseVideo);
+                String directoryAndMediaURL = fileOperationHelper.createURLWithDirectory(
+                        ApiPaths.SavingExerciseMediaPath.CTRL+exercise.getId()+"",
+                        persistedExerciseVideo.getId()+"-" + newFileName.toString(),
+                        fileType+""
+                );
+                String savedUrl = fileOperationHelper.saveFileByDirectory(multipartFile, directoryAndMediaURL);
+                persistedExerciseVideo.setVideoUrl(savedUrl);
+                persistedExerciseVideo.setExercise(exercise);
+                exerciseVideoRepository.save(persistedExerciseVideo);
             }
         }
     }
-
-
 
 }

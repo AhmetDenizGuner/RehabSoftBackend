@@ -1,17 +1,15 @@
 package com.hacettepe.rehabsoft.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "epilepsy")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "idgen", sequenceName = "doctor_seq", initialValue = 1, allocationSize = 1)
@@ -19,7 +17,6 @@ public class Epilepsy extends BaseEntity{
     @Column(name = "epilepsy_situation")
     private String epilepsySituation;
 
-    @JsonBackReference
     @OneToOne(
             fetch = FetchType.LAZY
     )

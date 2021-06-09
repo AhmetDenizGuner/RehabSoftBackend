@@ -41,6 +41,7 @@ public class OnlineMeetingController {
     @RequestMapping(value = "/getOnlineMeetingsByUsername/{username}",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_USER') || hasRole('ROLE_DOCTOR')")
     public ResponseEntity<List<OnlineMeetingDto>> getOnlineMeetingsByUsername(@PathVariable String username) throws Exception {
+        log.warn("getOnlineMeetingsByUsername metodu basariyla calisti");
         List<OnlineMeetingDto> onlineMeetingDtos = onlineMeetingService.getOnlineMeetingsByUsername(username);
         if(onlineMeetingDtos == null){
             responseMessage.setResponseMessage("Online görüşme bulunamadı");
@@ -52,7 +53,13 @@ public class OnlineMeetingController {
 
     @RequestMapping(value = "/isUsernameHasOnlineMeetingInCurrentTime/{username}",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_USER') || hasRole('ROLE_DOCTOR')")
-    public ResponseEntity<Boolean> isUsernameHasOnlineMeetingInCurrentDay(@PathVariable String username) throws Exception {
+    public ResponseEntity<Boolean> isUsernameHasOnlineMeetingInCurrentDay(@PathVariable String username) {
         return ResponseEntity.ok(onlineMeetingService.isUsernameHasOnlineMeetingInCurrentDay(username));
+    }
+
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_USER') || hasRole('ROLE_DOCTOR')")
+    public void delete(@PathVariable Long id) {
+        onlineMeetingService.deleteById(id);
     }
 }
