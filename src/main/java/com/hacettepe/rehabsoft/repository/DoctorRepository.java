@@ -20,4 +20,7 @@ public interface DoctorRepository extends JpaRepository<Doctor,Long> {
 
     @Query("select d from Doctor d, Patient p where p.doctor.id = d.id and p.user.username = ?1")
     Doctor getDoctorByPatientUsername(String username);
+
+    @Query("select d from Doctor d where d.user.username = ?1")
+    Doctor getDoctorByUsername(String username);
 }

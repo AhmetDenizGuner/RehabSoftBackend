@@ -1,10 +1,6 @@
 package com.hacettepe.rehabsoft.controller;
 
 import com.hacettepe.rehabsoft.dto.DoctorDto;
-import com.hacettepe.rehabsoft.dto.PatientDetailsDto;
-import com.hacettepe.rehabsoft.dto.PatientDto;
-import com.hacettepe.rehabsoft.dto.VideoRequestDto;
-import com.hacettepe.rehabsoft.entity.Doctor;
 import com.hacettepe.rehabsoft.helper.ResponseMessage;
 import com.hacettepe.rehabsoft.service.DoctorService;
 import com.hacettepe.rehabsoft.util.ApiPaths;
@@ -49,8 +45,14 @@ public class DoctorController {
     @RequestMapping(value = "/getByUsername/{username}", method = RequestMethod.GET)
     public ResponseEntity<DoctorDto> getDoctorByUsername(@PathVariable String username){
         log.warn("getDoctorByUsername metodu calisti");
-        DoctorDto doctors = doctorService.getDoctorByPatientUsername(username);
+        DoctorDto doctors = doctorService.getDoctorByUsername(username);
         return ResponseEntity.ok(doctors);
     }
 
+    @RequestMapping(value = "/getByPatientUsername/{username}", method = RequestMethod.GET)
+    public ResponseEntity<DoctorDto> getDoctorByPatientUsername(@PathVariable String username){
+        log.warn("getDoctorByUsername metodu calisti");
+        DoctorDto doctors = doctorService.getDoctorByPatientUsername(username);
+        return ResponseEntity.ok(doctors);
+    }
 }
