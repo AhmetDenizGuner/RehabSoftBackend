@@ -20,17 +20,18 @@ public class GoogleDriveHelper {
 
     //@Value("${spring.cloud.gcp.credentials.location}")
     //private String GOOGLE_CREDENTIALS_LOCATION;
-    private final String BUCKET_NAME = "spring-bucket-rehabsoft_cs";
+    private final String BUCKET_NAME = "spring-bucket-rehabsoft_css";
 
     private final Bucket bucket;
     private final Storage storage;
 
     public GoogleDriveHelper() throws IOException, URISyntaxException {
-        InputStream in = getClass().getResourceAsStream("/key_credentials.json");
+        InputStream in = getClass().getResourceAsStream("/key_credentials2.json");
         Credentials credentials = GoogleCredentials
                 .fromStream(in);
         StorageOptions options = StorageOptions.newBuilder()
-                .setProjectId("hacettepe-rehabsoft")
+                .setProjectId("focus-antler-316416 ya" +
+                        "")
                 .setCredentials(credentials).build();
         storage = options.getService();
         bucket = storage.get(BUCKET_NAME);
