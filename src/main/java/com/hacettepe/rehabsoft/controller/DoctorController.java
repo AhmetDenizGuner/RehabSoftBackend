@@ -49,7 +49,7 @@ public class DoctorController {
     @RequestMapping(value = "/getByUsername/{username}", method = RequestMethod.GET)
     public ResponseEntity<DoctorDto> getDoctorByUsername(@PathVariable String username){
         log.warn("getDoctorByUsername metodu calisti");
-        DoctorDto doctors = doctorService.getDoctorByUsername(username);
+        DoctorDto doctors = doctorService.getDoctorByPatientUsername(username);
         return ResponseEntity.ok(doctors);
     }
 

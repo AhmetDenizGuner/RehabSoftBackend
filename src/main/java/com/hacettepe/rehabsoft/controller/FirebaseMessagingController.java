@@ -21,7 +21,7 @@ public class FirebaseMessagingController {
 
     private final FirebaseNotificationService firebaseNotificationService;
 
-    @PreAuthorize("hasRole('ROLE_DOCTOR') || hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR') || hasRole('ROLE_USER') || hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/save-token/{username}",method = RequestMethod.POST)
     public ResponseEntity<UserDto> saveFirebaseTokenByUsername(@PathVariable String username, @RequestBody String token) {
         log.warn("saveFirebaseTokenByUsername controllerına girdi");
